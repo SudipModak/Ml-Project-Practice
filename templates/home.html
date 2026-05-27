@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Math Score Predictor</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins',sans-serif;
+        }
+
+        body{
+            min-height:100vh;
+            background:
+            radial-gradient(circle at top left,#2563eb 0%,transparent 25%),
+            radial-gradient(circle at bottom right,#7c3aed 0%,transparent 25%),
+            linear-gradient(135deg,#020617,#0f172a,#1e293b);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            padding:40px;
+            color:white;
+            overflow-x:hidden;
+        }
+
+        .container{
+            width:100%;
+            max-width:1350px;
+            background:rgba(255,255,255,0.06);
+            border:1px solid rgba(255,255,255,0.1);
+            backdrop-filter:blur(18px);
+            border-radius:35px;
+            padding:50px;
+            box-shadow:0 20px 60px rgba(0,0,0,0.45);
+            animation:fadeIn 1s ease;
+        }
+
+        /* HEADER */
+
+        .header{
+            text-align:center;
+            margin-bottom:60px;
+        }
+
+        .header h1{
+            font-size:64px;
+            font-weight:700;
+            margin-bottom:20px;
+            line-height:1.2;
+        }
+
+        .header span{
+            color:#38bdf8;
+            text-shadow:0 0 15px rgba(56,189,248,0.5);
+        }
+
+        .header p{
+            max-width:900px;
+            margin:auto;
+            color:#cbd5e1;
+            font-size:18px;
+            line-height:1.9;
+        }
+
+        /* MAIN GRID */
+
+        .main{
+            display:grid;
+            grid-template-columns:1.1fr 1fr;
+            gap:45px;
+            align-items:center;
+        }
+
+        /* LEFT SECTION */
+
+        .left-section{
+            background:rgba(255,255,255,0.05);
+            padding:45px;
+            border-radius:30px;
+            border:1px solid rgba(255,255,255,0.08);
+            transition:0.4s ease;
+        }
+
+        .left-section:hover{
+            transform:translateY(-8px);
+            box-shadow:0 25px 50px rgba(0,0,0,0.35);
+        }
+
+        .left-section h2{
+            font-size:36px;
+            margin-bottom:25px;
+            color:#38bdf8;
+        }
+
+        .left-section p{
+            color:#e2e8f0;
+            line-height:1.9;
+            font-size:16px;
+            margin-bottom:22px;
+        }
+
+        .features{
+            margin-top:30px;
+        }
+
+        .feature{
+            display:flex;
+            align-items:center;
+            gap:15px;
+            background:rgba(255,255,255,0.05);
+            padding:18px 22px;
+            border-radius:18px;
+            margin-bottom:18px;
+            transition:0.3s ease;
+        }
+
+        .feature:hover{
+            transform:translateX(10px);
+            background:rgba(255,255,255,0.08);
+        }
+
+        .feature-dot{
+            width:12px;
+            height:12px;
+            border-radius:50%;
+            background:#38bdf8;
+            box-shadow:0 0 15px #38bdf8;
+        }
+
+        .feature span{
+            font-size:16px;
+            color:#f1f5f9;
+        }
+
+        /* FORM SECTION */
+
+        .form-card{
+            background:rgba(255,255,255,0.05);
+            padding:45px;
+            border-radius:30px;
+            border:1px solid rgba(255,255,255,0.08);
+            transition:0.4s ease;
+        }
+
+        .form-card:hover{
+            transform:translateY(-8px);
+            box-shadow:0 25px 50px rgba(0,0,0,0.35);
+        }
+
+        .form-card h2{
+            text-align:center;
+            margin-bottom:35px;
+            font-size:34px;
+            color:#38bdf8;
+        }
+
+        .form-group{
+            margin-bottom:22px;
+        }
+
+        .form-group label{
+            display:block;
+            margin-bottom:10px;
+            font-size:15px;
+            color:#e2e8f0;
+            font-weight:500;
+        }
+
+        .form-control{
+            width:100%;
+            padding:16px 18px;
+            border:none;
+            border-radius:16px;
+            background:rgba(255,255,255,0.08);
+            color:white;
+            font-size:15px;
+            outline:none;
+            transition:0.3s ease;
+        }
+
+        .form-control:hover{
+            background:rgba(255,255,255,0.12);
+        }
+
+        .form-control:focus{
+            border:1px solid #38bdf8;
+            box-shadow:0 0 18px rgba(56,189,248,0.35);
+            background:rgba(255,255,255,0.1);
+        }
+
+        select option{
+            background:#0f172a;
+            color:white;
+        }
+
+        /* BUTTON */
+
+        .predict-btn{
+            width:100%;
+            padding:18px;
+            border:none;
+            border-radius:18px;
+            background:linear-gradient(135deg,#38bdf8,#0ea5e9);
+            color:#0f172a;
+            font-size:18px;
+            font-weight:700;
+            cursor:pointer;
+            margin-top:15px;
+            transition:0.3s ease;
+            box-shadow:0 10px 30px rgba(56,189,248,0.35);
+        }
+
+        .predict-btn:hover{
+            transform:translateY(-5px);
+            box-shadow:0 15px 40px rgba(56,189,248,0.5);
+        }
+
+        /* RESULT BOX */
+
+        .result-box{
+            margin-top:30px;
+            padding:30px;
+            border-radius:24px;
+            text-align:center;
+            background:linear-gradient(
+                135deg,
+                rgba(56,189,248,0.15),
+                rgba(14,165,233,0.08)
+            );
+            border:1px solid rgba(56,189,248,0.25);
+            animation:fadeIn 0.8s ease;
+        }
+
+        .result-box h3{
+            font-size:22px;
+            color:#cbd5e1;
+            margin-bottom:15px;
+            font-weight:500;
+        }
+
+        .score{
+            font-size:75px;
+            font-weight:700;
+            color:#38bdf8;
+            text-shadow:0 0 25px rgba(56,189,248,0.55);
+        }
+
+        /* ANIMATIONS */
+
+        @keyframes fadeIn{
+
+            from{
+                opacity:0;
+                transform:translateY(25px);
+            }
+
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width:1100px){
+
+            .main{
+                grid-template-columns:1fr;
+            }
+
+            .header h1{
+                font-size:48px;
+            }
+        }
+
+        @media(max-width:700px){
+
+            body{
+                padding:20px;
+            }
+
+            .container{
+                padding:25px;
+            }
+
+            .header h1{
+                font-size:34px;
+            }
+
+            .header p{
+                font-size:15px;
+            }
+
+            .left-section,
+            .form-card{
+                padding:25px;
+            }
+
+            .score{
+                font-size:55px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <h1>
+                Student <span>Math Score Predictor</span>
+            </h1>
+
+            <p>
+                This is an End-to-End Machine Learning project that predicts
+                students' math scores based on educational and personal parameters.
+                The application uses advanced regression models to analyze data
+                and generate intelligent predictions in real-time.
+            </p>
+
+        </div>
+
+        <!-- MAIN SECTION -->
+
+        <div class="main">
+
+            <!-- LEFT CONTENT -->
+
+            <div class="left-section">
+
+                <h2>Project Overview</h2>
+
+                <p>
+                    This project demonstrates the complete lifecycle of a
+                    real-world Machine Learning application including
+                    data preprocessing, feature engineering,
+                    model training, hyperparameter tuning,
+                    evaluation, logging, exception handling,
+                    and deployment.
+                </p>
+
+                <p>
+                    Based on the input features provided by the user,
+                    the system predicts the expected math score
+                    using trained Machine Learning models.
+                </p>
+
+                <div class="features">
+
+                    <div class="feature">
+                        <div class="feature-dot"></div>
+                        <span>Gender Based Performance Analysis</span>
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-dot"></div>
+                        <span>Race & Ethnicity Evaluation</span>
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-dot"></div>
+                        <span>Parental Education Impact Analysis</span>
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-dot"></div>
+                        <span>Lunch & Preparation Course Insights</span>
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-dot"></div>
+                        <span>Reading & Writing Score Correlation</span>
+                    </div>
+
+                    <div class="feature">
+                        <div class="feature-dot"></div>
+                        <span>Real-Time AI Powered Prediction</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- FORM SECTION -->
+
+            <div class="form-card">
+
+                <h2>Predict Math Score</h2>
+
+                <form action="{{ url_for('predict_datapoint') }}" method="POST">
+
+                    <!-- Gender -->
+
+                    <div class="form-group">
+
+                        <label>Gender</label>
+
+                        <select class="form-control"
+                            name="gender"
+                            required>
+
+                            <option selected disabled>
+                                Select Gender
+                            </option>
+
+                            <option value="male">
+                                Male
+                            </option>
+
+                            <option value="female">
+                                Female
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Race -->
+
+                    <div class="form-group">
+
+                        <label>Race / Ethnicity</label>
+
+                        <select class="form-control"
+                            name="race_ethnicity"
+                            required>
+
+                            <option selected disabled>
+                                Select Group
+                            </option>
+
+                            <option value="group A">
+                                Group A
+                            </option>
+
+                            <option value="group B">
+                                Group B
+                            </option>
+
+                            <option value="group C">
+                                Group C
+                            </option>
+
+                            <option value="group D">
+                                Group D
+                            </option>
+
+                            <option value="group E">
+                                Group E
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Education -->
+
+                    <div class="form-group">
+
+                        <label>Parental Level of Education</label>
+
+                        <select class="form-control"
+                            name="parental_level_of_education"
+                            required>
+
+                            <option selected disabled>
+                                Select Education
+                            </option>
+
+                            <option value="some high school">
+                                Some High School
+                            </option>
+
+                            <option value="high school">
+                                High School
+                            </option>
+
+                            <option value="some college">
+                                Some College
+                            </option>
+
+                            <option value="associate's degree">
+                                Associate's Degree
+                            </option>
+
+                            <option value="bachelor's degree">
+                                Bachelor's Degree
+                            </option>
+
+                            <option value="master's degree">
+                                Master's Degree
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Lunch -->
+
+                    <div class="form-group">
+
+                        <label>Lunch Type</label>
+
+                        <select class="form-control"
+                            name="lunch"
+                            required>
+
+                            <option selected disabled>
+                                Select Lunch Type
+                            </option>
+
+                            <option value="standard">
+                                Standard
+                            </option>
+
+                            <option value="free/reduced">
+                                Free / Reduced
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Test Preparation -->
+
+                    <div class="form-group">
+
+                        <label>Test Preparation Course</label>
+
+                        <select class="form-control"
+                            name="test_preparation_course"
+                            required>
+
+                            <option selected disabled>
+                                Select Course Status
+                            </option>
+
+                            <option value="completed">
+                                Completed
+                            </option>
+
+                            <option value="none">
+                                None
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Reading Score -->
+
+                    <div class="form-group">
+
+                        <label>Reading Score</label>
+
+                        <input
+                            type="number"
+                            class="form-control"
+                            name="reading_score"
+                            placeholder="Enter Reading Score"
+                            min="0"
+                            max="100"
+                            required
+                        >
+
+                    </div>
+
+                    <!-- Writing Score -->
+
+                    <div class="form-group">
+
+                        <label>Writing Score</label>
+
+                        <input
+                            type="number"
+                            class="form-control"
+                            name="writing_score"
+                            placeholder="Enter Writing Score"
+                            min="0"
+                            max="100"
+                            required
+                        >
+
+                    </div>
+
+                    <!-- BUTTON -->
+
+                    <button type="submit" class="predict-btn">
+                        Predict Math Score
+                    </button>
+
+                </form>
+
+                <!-- RESULT -->
+
+                {% if results %}
+
+                <div class="result-box">
+
+                    <h3>Predicted Math Score</h3>
+
+                    <div class="score">
+                        {{ results }}
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
